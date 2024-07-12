@@ -22,7 +22,8 @@ body {
     margin: 0 auto;
     margin-bottom: 30px;
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: 1rem;
+    line-height: 0.01;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 .card {
@@ -56,9 +57,11 @@ button {
 
 .gray-label {
     color: #bebebe;
+    line-height: 0.01;
     font-size: 1rem;
 }
 
 .reading {
-    font-size: 1.8rem;
+    line-height: 0.0;
+    font-size: 4rem;
 }
