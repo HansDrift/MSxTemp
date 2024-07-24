@@ -142,11 +142,17 @@ GitHub e36drift@web.de
             bleStateContainer.innerHTML = 'Connected to device ' + device.name;
             bleStateContainer.style.color = "#24af37";
             device.addEventListener('gattservicedisconnected', onDisconnected);
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
             return device.gatt.connect();
         })
         .then(gattServer =>{
             bleServer = gattServer;
             console.log("Connected to GATT Server");
+            //setTimeout(function() {
+            //    console.log("Timeout: ", bleServiceFound);
+            //}, 1000);
             return bleServer.getPrimaryService(bleService);
         })
         //connection garrServer ----
@@ -158,24 +164,36 @@ GitHub e36drift@web.de
             if ( bleServiceFound ==0){
                 bleServiceFound = service;
             }
+            //setTimeout(function() {
+            //    console.log("Timeout service sensorCharacteristic: ", bleServiceFound);
+            //}, 1000);
             return bleServiceFound.getCharacteristic(sensorCharacteristic);
         })
 
         .then(characteristic => {
             console.log("Characteristic discovered:", characteristic.uuid);
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
             sensorCharacteristicFound = characteristic;
             characteristic.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
-            characteristic.startNotifications();
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            return characteristic.startNotifications();
             console.log("Characteristic Notifications Started.");
-            return characteristic.readValue();
+            //setTimeout(function() {
+            //    console.log("Timeout: characteristic ", characteristic.uuid);
+            //}, 2000);
+            //return characteristic.readValue();
         })
 
-        .then(value => {
+        /*.then(value => {
             console.log("Read value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
             retrievedValue.innerHTML = decodedValue;
-        })
+        })*/
         //Characteristic Ende ---
 
         //T1 ---
@@ -186,24 +204,36 @@ GitHub e36drift@web.de
             console.log("sensorCharT1 : ", bleServer);
             console.log("sensorCharT1 bleServiceFound: ", bleServiceFound);
             console.log("sensorCharT1 bleServer.connected: ", bleServer.connected);
+            //setTimeout(function() {
+            //    console.log("Timeout: service ensorCharT1 ", bleServiceFound);
+            //}, 2000);
             return bleServiceFound.getCharacteristic(sensorCharT1);
         })
 
         .then(sensorCharT1 => {
             console.log("Characteristic discovered:", sensorCharT1.uuid);
             sensorCharT1Found = sensorCharT1;
-            sensorCharT1.addEventListener('characteristicvaluechanged', handleCharT1Change);
-            sensorCharT1.startNotifications();
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            sensorCharT1.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            return sensorCharT1.startNotifications();
             console.log("Characteristic Notifications Started.");
-            return sensorCharT1.readValue();
+            //setTimeout(function() {
+            //    console.log("Timeout: sensorCharT1 ", sensorCharT1.uuid);
+            //}, 1000);
+            //return sensorCharT1.readValue();
         })
 
-        .then(value => {
+        /*.then(value => {
             console.log("Read value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
             retrievedValueT1.innerHTML = decodedValue;
-        })
+        })*/
         //T1 Ende ---
 
         //T2---
@@ -214,24 +244,36 @@ GitHub e36drift@web.de
             console.log("sensorCharT2 : ", bleServer);
             console.log("sensorCharT2 bleServiceFound: ", bleServiceFound);
             console.log("sensorCharT2 bleServer.connected: ", bleServer.connected);
+            //setTimeout(function() {
+            //    console.log("Timeout: ", bleServiceFound);
+            //}, 1000);
             return bleServiceFound.getCharacteristic(sensorCharT2);
         })
 
         .then(sensorCharT2 => {
             console.log("Characteristic discovered:", sensorCharT2.uuid);
             sensorCharT2Found = sensorCharT2;
-            sensorCharT2.addEventListener('characteristicvaluechanged', handleCharT2Change);
-            sensorCharT2.startNotifications();
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            sensorCharT2.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            return sensorCharT2.startNotifications();
             console.log("Characteristic Notifications Started.");
-            return sensorCharT2.readValue();
+            //setTimeout(function() {
+            //    console.log("Timeout: ", sensorCharT2.uuid);
+            //}, 2000);
+            //return sensorCharT2.readValue();
         })
 
-        .then(value => {
+        /*.then(value => {
             console.log("Read value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
             retrievedValueT2.innerHTML = decodedValue;
-        })
+        })*/
         //T2 Ende ---
 
         //T3---
@@ -242,24 +284,36 @@ GitHub e36drift@web.de
             console.log("sensorCharT3 : ", bleServer);
             console.log("sensorCharT3 bleServiceFound: ", bleServiceFound);
             console.log("sensorCharT3 bleServer.connected: ", bleServer.connected);
+            //setTimeout(function() {
+            //    console.log("Timeout: ", bleServiceFound);
+            //}, 2000);
             return bleServiceFound.getCharacteristic(sensorCharT3);
         })
 
         .then(sensorCharT3 => {
             console.log("Characteristic discovered:", sensorCharT3.uuid);
             sensorCharT3Found = sensorCharT3;
-            sensorCharT3.addEventListener('characteristicvaluechanged', handleCharT3Change);
-            sensorCharT3.startNotifications();
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            sensorCharT3.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
+            //setTimeout(function() {
+            //    console.log("Timeout: ");
+            //}, 1000);
+            return sensorCharT3.startNotifications();
             console.log("Characteristic Notifications Started.");
-            return sensorCharT3.readValue();
+            //setTimeout(function() {
+            //    console.log("Timeout: ", sensorCharT3.uuid);
+            //}, 2000);
+            //return sensorCharT3.readValue();
         })
 
-        .then(value => {
+        /*.then(value => {
             console.log("Read value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
             retrievedValueT3.innerHTML = decodedValue;
-        })
+        })*/
         //T3 Ende ---
 
         //Error handling ---
@@ -276,6 +330,42 @@ GitHub e36drift@web.de
         connectToDevice();
     }
 
+    //Characteristic Change funktion mit Abfrage uuid
+    function handleCharacteristicChange(event){
+        let elem = event.target;
+        let value = elem.value;
+        let elemUuid = elem.uuid;
+        const newValueReceived = new TextDecoder().decode(value);
+        //console.log("Characteristic value changed: ", newValueReceived, " ", elemUuid);
+        //if (elemUuid == )
+        switch (elemUuid){
+
+        case sensorCharacteristic:
+            retrievedValue.innerHTML = newValueReceived;
+            timestampContainer.innerHTML = getDateTime();
+            console.log("sensorCharacteristic: ", newValueReceived, " ", elemUuid, " ", sensorCharacteristic);
+            break;
+        case sensorCharT1:
+            retrievedValueT1.innerHTML = newValueReceived;
+            timestampT1Container.innerHTML = getDateTime();
+            console.log("sensorCharT1: ", newValueReceived, " ", elemUuid, " ", sensorCharT1);
+        break;
+        case sensorCharT2:
+            retrievedValueT2.innerHTML = newValueReceived;
+            timestampT2Container.innerHTML = getDateTime();
+            console.log("sensorCharT2: ", newValueReceived, " ", elemUuid, " ", sensorCharT2);
+        break;
+        case sensorCharT3:
+            retrievedValueT3.innerHTML = newValueReceived;
+            timestampT3Container.innerHTML = getDateTime();
+            console.log("sensorCharT3: ", newValueReceived, " ", elemUuid, " ", sensorCharT3);
+        break;
+        default:
+            console.log("Unknown Characteristic: ", newValueReceived, " ", elemUuid);
+        }
+    } 
+
+    /*
     //Characteristic Change funktion
     function handleCharacteristicChange(event){
         const newValueReceived = new TextDecoder().decode(event.target.value);
@@ -307,7 +397,7 @@ GitHub e36drift@web.de
         retrievedValueT3.innerHTML = newValueReceived;
         timestampT3Container.innerHTML = getDateTime();
     } 
-
+*/
     function writeOnCharacteristic(value){
         if (bleServer && bleServer.connected) {
             bleServiceFound.getCharacteristic(ledCharacteristic)
