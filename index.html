@@ -1,19 +1,124 @@
+
 <!--
-GitHub e36drift@web.de Google Chrom Android and Windows
+GitHub e36drift@web.de Testfile
+Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple BlueFy Browser
+"https://hansdrift.github.io/MSxTemp/" Hans Drift MSx Bluetooth Anzeige
 -->
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MSx Bluetooth Anzeige/switch -- Google Chrom Android and Windows</title>
+    <title>MSx Bluetooth display/switch</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="style.css">
+
+  <link rel="icon" class="js-site-favicon" type="image/x-icon" href="HDlogo01.ico">
+    <style>
+    html {
+        font-family: Arial, Helvetica, sans-serif;
+        display: inline-block;
+        text-align: center;
+    }
+    h1 {
+        text-align: bottom;
+        font-size: 1.2rem;
+        color: rgb(255, 255, 255);
+    }
+    .topnav {
+        overflow: hidden;
+        background-color: #000000;
+    }
+    body {
+        margin: 0;
+    }
+    .content {
+        padding: 10px;
+    }
+    .card-grid {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        display: grid;
+        grid-gap: 1rem;
+        line-height: 0.01;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .card {
+        background-color: white;
+        box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    }
+    .card-grid2 {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-bottom: 0px;
+        display: grid;
+        grid-gap: 1rem;
+        line-height: 0.01;
+        grid-template-columns: repeat(auto-fit, minmax(3px, 1fr));
+    }
+    .card2 {
+        text-align: bottom;
+        background-color: rgb(255, 255, 255);
+        box-shadow: 2px 2px 12px 1px rgba(151, 223, 68, 0.5);
+    }
+    button {
+        color: rgb(255, 255, 255);
+        padding: 14px 20px;
+        margin: 14px 0;
+        border: none;
+        cursor: pointer;
+        border-radius: 2px;
+    }
+    
+    .button2 {
+        color: rgb(255, 255, 255);
+        padding: 0% 0%;
+        margin: 0% 0%;
+        border: none;
+        cursor: pointer;
+        border-radius: 0%;
+        background-color: #000000;
+    }
+    .onButton{
+        background-color: #1b8a94;
+    }
+    
+    .offButton{
+        background-color: #5f6c6d;
+    }
+    
+    .connectButton{
+        background-color: #24af37;
+    }
+    
+    .disconnectButton{
+        background-color: #d13a30;
+    }
+    
+    .gray-label {
+        color: #bebebe;
+        line-height: 0.0;
+        font-size: 1rem;
+    }
+    
+    .reading {
+        line-height: 0.0;
+        font-size: 3.5rem;
+    }
+    </style>
     <meta charset="UTF-8">
 </head>
 <body>
     <div class="topnav">
-        <h1>MSx Bluetooth Anzeige/switch -- Google Chrom Android and Windows</h1>
+        <div class="card-grid2">
+            <h1>
+                <table style="width:100%">
+                    <tr>
+                    <th>MSx Bluetooth display</th>
+                    <th><button id="InfoButton" class="button2"><img src="HDlogo01.ico" height="64"></button></th>
+                    </tr>
+                </table>
+            </h1>
+        </div>
     </div>
     <div class="content">
         <div class="card-grid">
@@ -27,19 +132,19 @@ GitHub e36drift@web.de Google Chrom Android and Windows
             </div>
         </div>
         <div class="card-grid">
-            <div class="card">
+            <div class="card" id="AT">
                 <h2>Ansauglufttemperatur</h2>
                 <p class="reading"><span id="valueT1Container">-123.T1</span> °C</p>
                 <p class="gray-label">Last reading: <span id="timestampT1"></span></p>
             </div>
 
-            <div class="card">
+            <div class="card" id="KT">
                 <h2>Kühlmitteltemperatur</h2>
                 <p class="reading"><span id="valueT2Container">-123.T2</span> °C</p>
                 <p class="gray-label">Last reading: <span id="timestampT2"></span></p>
             </div>
 
-            <div class="card">
+            <div class="card" id="OT">
                 <h2>Öltemperatur</h2>
                 <p class="reading"><span id="valueT3Container">-123.T3</span> °C</p>
                 <p class="gray-label">Last reading: <span id="timestampT3"></span></p>
@@ -50,29 +155,17 @@ GitHub e36drift@web.de Google Chrom Android and Windows
                 <p class="reading"><span id="valueBattContainer">-000.Batt</span> V</p>
                 <p class="gray-label">Last reading: <span id="timestampBatt"></span></p>
             </div>
-            
-            <div class="card">
-                <h2>Kontrollschalter test</h2>
-                <button id="onButton" class="onButton">ON</button>
-                <button id="offButton" class="offButton">OFF</button>
-                <p class="gray-label">Last value sent: <span id="valueSent"></span></p>
-            </div>
-
-            <div class="card">
-                <h2>Zähler</h2>
-                <p class="reading"><span id="valueContainer">---</span></p>
-                <p class="gray-label">Last reading: <span id="timestamp"></span></p>
-            </div>
         </div>
     </div>
     <div class="footer">
-        <p><a href="https://hansdrift.github.io/MSxTemp/">Hans Drift MSx Bluetooth Anzeige/switch 04a and S3z04a für Google Chrom Android and Windows</a></p>
-    </div>
+        <p>MSx Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple BlueFy Browser </p>    
+        <p><a href="https://hansdrift.github.io/MSxTemp/">Hans Drift MSx Bluetooth Anzeige</a></p>    
 </body>
 <script>
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
+    const InfoButton = document.getElementById('InfoButton');
     const onButton = document.getElementById('onButton');
     const offButton = document.getElementById('offButton');
     const retrievedValue = document.getElementById('valueContainer');
@@ -93,25 +186,11 @@ GitHub e36drift@web.de Google Chrom Android and Windows
     const timestampBattContainer = document.getElementById('timestampBatt');
     const timestampInfoContainer = document.getElementById('timestampInfo');
 
-    /*
-    31.07.2024 generiert unter:
-    https://www.uuidgenerator.net/
-    
-    aefef71a-088f-4d64-8b0a-b7f850207df6
-    4427bd07-29e9-470c-adab-f43d9c6f69b3
-    754b92b1-9280-424c-a967-ef50cb01f85f
-    c51f6137-e763-4617-9c0d-6227c6003080
-    06e6e849-8e8c-4c5d-820f-fadea7a63e47
-    20ae8631-5bf5-41e2-a4cc-835295bcc942
-    0cf407a6-3a4d-4abf-b1c6-b478d6021234
-    faf4416a-3741-4f09-b319-d817a50219b5
-    
-    a4e398e8-46a2-4bc1-9001-f251a475985e
-    bb1393db-fc8f-4177-b98d-1557b1bbface
-    */
+    const userInput1Container = document.getElementById('valueUserInput1');
     
     //Define BLE Device Specs
     var deviceName ='MSx';
+	var deviceA;
     var bleService = 'aefef71a-088f-4d64-8b0a-b7f850207df6';
     var sensorCharacteristic= '4427bd07-29e9-470c-adab-f43d9c6f69b3';
     var ledCharacteristic = '754b92b1-9280-424c-a967-ef50cb01f85f';
@@ -127,7 +206,6 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 
     //Global Variables to Handle Bluetooth
     var bleServer;
-    //var bleServiceFound;
     var bleServiceFound = 0;
     var sensorCharacteristicFound;
 	var timeoutDME = 10000; //timeout, if Characteristics not updates since 10000msek
@@ -148,15 +226,29 @@ GitHub e36drift@web.de Google Chrom Android and Windows
     var receivedValueBatt;
     var receivedValueInfo;
 
+    var receivedUserInput1;
+
+    var at = document.getElementById("AT");
+    var kt = document.getElementById("KT");
+    var ot = document.getElementById("OT");
+    var st = document.getElementById("ST");
+
     // Connect Button (search for BLE Devices only if BLE is available)
     connectButton.addEventListener('click', (event) => {
-        if (isWebBluetoothEnabled()){
-            connectToDevice();
+        //Prüfung zum Test deaktiviert
+	if (isWebBluetoothEnabled()){
+            connectToDevice(deviceA);
         }
     });
 
     // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
+
+    // Info Button
+    InfoButton.addEventListener('click', (event) =>{
+        window.alert("e36drift@web.de Temperaturanzeige für MS41, MS42, MS43 mit gängigen Softwareversionen. Bei Bedarf bitte Softwareupdate durchführen.");
+
+    });
 
     // Write to the ESP32 LED Characteristic
     onButton.addEventListener('click', () => writeOnCharacteristic(1));
@@ -174,116 +266,64 @@ GitHub e36drift@web.de Google Chrom Android and Windows
     }
 
     // Connect to BLE Device and Enable Notifications
-    function connectToDevice(){
+    async function connectToDevice(device){
         console.log('Initializing Bluetooth...');
-        navigator.bluetooth.requestDevice({
-            filters: [{name: deviceName}],
-            optionalServices: [bleService]
-        })
-        .then(device => {
-            console.log('Device Selected:', device.name);
-            bleStateContainer.innerHTML = 'Verbunden mit ' + device.name;
-            bleStateContainer.style.color = "#24af37";
-            device.addEventListener('gattservicedisconnected', onDisconnected);
-            //setTimeout(function() {
-            //    console.log("Timeout: ");
-            //}, 1000);
-            return device.gatt.connect();
-        })
-        .then(gattServer =>{
-            bleServer = gattServer;
-            console.log("Connected to GATT Server");
-            //setTimeout(function() {
-            //    console.log("Timeout: ", bleServiceFound);
-            //}, 1000);
-            return bleServer.getPrimaryService(bleService);
-        })
-        //connection garrServer ----
-
-        //Characteristic ---
-        .then(service => {
-            console.log("Characteristic bleServer: ", bleServer);
-            console.log("Characteristic bleServer.connected: ", bleServer.connected);
-            if ( bleServiceFound ==0){
-                bleServiceFound = service;
-            }
-            //setTimeout(function() {
-            //    console.log("Timeout service sensorCharacteristic: ", bleServiceFound);
-            //}, 1000);
-            return bleServiceFound.getCharacteristic(sensorCharacteristic);
-        })
-
-/*        .then(characteristic => {
-            console.log("Characteristic discovered:", characteristic.uuid);
-            sensorCharacteristicFound = characteristic;
-            characteristic.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
-            return characteristic.startNotifications();
-            console.log("Characteristic Notifications Started.");
-        })
-*/
-        .then(characteristic => {
-            console.log("Characteristic discovered:", characteristic.uuid);
+		try {
+			console.log('device = navigator.bluetooth.requestDevice');			
+			device = await navigator.bluetooth.requestDevice({
+			//const device = await navigator.bluetooth.requestDevice({
+				filters: [{name: deviceName}],
+				optionalServices: [bleService]
+			})
+				console.log('Device Selected: ', device.name);
+				bleStateContainer.innerHTML = 'Verbunden mit ' + device.name;
+				bleStateContainer.style.color = "#24af37";
+				device.addEventListener('gattservicedisconnected', onDisconnected);
+				console.log("Nach gattservicedisconnected()");
+				deviceA = device; //Setze deviceA auf verbundenes Bluetooth Gerät
+				connectGatt(device);
+		}
+        catch(error) {
+            console.log('Error connectToDevice: ', error);
+        }
+		
+    }
+	async function connectGatt(device){
+		console.log('connectGatt()', device);
+		try {
+			const server = await device.gatt.connect();
+			bleServer = server;
+            console.log('server: ', server);
+			const service = await server.getPrimaryService(bleService);
+			bleServiceFound = service;
+            console.log('service: ', service);
+            console.log("Characteristic bleServer: ", server);
+            console.log("Characteristic bleServer.connected: ", server.connected);
+			const characteristic = await service.getCharacteristic(sensorCharacteristic);
+			console.log('characteristic: ', characteristic);
+            console.log("Characteristic uuid discovered: ", characteristic.uuid);
             sensorCharacteristicFound = characteristic;
             characteristic.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
             characteristic.startNotifications();
             console.log("Characteristic Notifications Started.");
-            return characteristic.readValue();
-        })
-		
-        .then(value => {
-            console.log("Read value: ", value);
+            const value = await characteristic.readValue();
+            console.log("value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
-            retrievedValue.innerHTML = decodedValue;
-        })
-        //Characteristic Ende ---
-
-        //T1 ---
-        .then(service => {
-            if ( bleServiceFound ==0){
-                bleServiceFound = service;
-            }
-            console.log("sensorCharT1 : ", bleServer);
-            console.log("sensorCharT1 bleServiceFound: ", bleServiceFound);
-            console.log("sensorCharT1 bleServer.connected: ", bleServer.connected);
-            return bleServiceFound.getCharacteristic(sensorCharT1);
-        })
-
- /*       .then(sensorCharT1 => {
-            console.log("Characteristic discovered:", sensorCharT1.uuid);
-            sensorCharT1Found = sensorCharT1;
-            sensorCharT1.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
-            return sensorCharT1.startNotifications();
-            console.log("Characteristic Notifications Started.");
-
-        })
-		
-        .then(sensorCharT1 => {
-            console.log("Characteristic discovered:", sensorCharT1.uuid);
-            sensorCharT1Found = sensorCharT1;
-            sensorCharT1.addEventListener('characteristicvaluechanged', handleCharacteristicChange);
-			//sensorCharT1.addEventListener('characteristicvaluechanged', handleCharT1Change);
-            sensorCharT1.startNotifications();
-            console.log("Characteristic Notifications Started.");
-            return sensorCharT1.readValue();
-        })
-
-        .then(value => {
-            console.log("Read value: ", value);
-            const decodedValue = new TextDecoder().decode(value);
-            console.log("Decoded value: ", decodedValue);
-            retrievedValueT1.innerHTML = decodedValue;
-        })
-        //T1 Ende ---
-*/            
-        //Error handling ---
-        .catch(error => {
-            console.log('Error: ', error);
-        })
-    }
-
+		}
+        catch(error) {
+            console.log('connectGatt(): ', error);
+			setTimeout(function() {
+				// Code, der erst nach 2 Sekunden ausgeführt wird
+				console.log('Warte 3Sek. ');
+				console.log('connectGatt(): ', deviceA);
+				connectGatt(deviceA);
+			}, 3000);
+			console.log('connectGatt() nach setTimeout: ', deviceA);
+        }
+    }	
     function onDisconnected(event){
-        console.log('Device Disconnected:', event.target.device.name);
+        console.log('----------------------------onDisconnected -- Device Disconnected:', event.target.device.name);
         bleStateContainer.innerHTML = "Verbindung getrennt";
         bleStateContainer.style.color = "#d13a30";
         retrievedValueInfo.innerHTML = "---";
@@ -291,8 +331,7 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 		retrievedValueT2.innerHTML = "---";
 		retrievedValueT3.innerHTML = "---";
 		retrievedValueBatt.innerHTML = "---";
-        //retrievedValueInfo.style.color = "#d13a30";
-        connectToDevice();
+	    connectGatt(deviceA);
     }
 
     //Characteristic Change funktion mit Abfrage uuid
@@ -301,16 +340,9 @@ GitHub e36drift@web.de Google Chrom Android and Windows
         let value = elem.value;
         let elemUuid = elem.uuid;
         const newValueReceived = new TextDecoder().decode(value);
-        //console.log("Characteristic value changed: ", newValueReceived, " ", elemUuid);
-        //if (elemUuid == )
         switch (elemUuid){
 
         case sensorCharacteristic:
-        //    retrievedValue.innerHTML = newValueReceived;
-        //    timestampContainer.innerHTML = getDateTime();
-        //    console.log("sensorCharacteristic: ", newValueReceived, " ", elemUuid, " ", sensorCharacteristic);
-        //    break;
-        //case sensorCharT1:
             //Test Mehrere Werte teilen
             //var receivedValueT1 = 'T1 110,33 T2 110,25 T3 141,263 Batt 16,70 Info Mxx2 X06 66,66°C X07 77,77V';
             receivedValue = newValueReceived;
@@ -355,6 +387,13 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 						console.log(" Else " + chars[5]);
 						retrievedValueT3.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
 				  }
+				  if ( chars[5] == "---" ){
+                        ot.style.display = "none"; //ausblenden
+                        console.log("ot none " + chars[5]);
+				  } else{
+                        ot.style.display = "block"; //einblenden
+                        console.log("ot block " + chars[5]);
+				  }                  
                 	console.log(" -- T3 " + chars[5]);                	
               }
               if (chars[6] == 'Batt' ){
@@ -390,85 +429,28 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 				  alertTimerIdDME = setTimeout ( "setDMEtimeout()", timeoutDME );
 				  console.log("alertTimerIdDME 2 "  + alertTimerIdDME + " Time: " + timeoutDME);
               } 
-            //retrievedValueT1.innerHTML = receivedValueT1;
             timestampT1Container.innerHTML = getDateTime();
             console.log("sensorCharT1: ", newValueReceived, " ", elemUuid, " ", sensorCharT1);
         break;
-        /*
-		case sensorCharT2:
-            //retrievedValueT2.innerHTML = newValueReceived;
-            //timestampT2Container.innerHTML = getDateTime();
-            console.log("sensorCharT2: ", newValueReceived, " ", elemUuid, " ", sensorCharT2);
-        break;
-        case sensorCharT3:
-            //retrievedValueT3.innerHTML = newValueReceived;
-            //timestampT3Container.innerHTML = getDateTime();
-            console.log("sensorCharT3: ", newValueReceived, " ", elemUuid, " ", sensorCharT3);
-        break;
-        case sensorCharBatt:
-            //retrievedValueBatt.innerHTML = newValueReceived;
-            //timestampBattContainer.innerHTML = getDateTime();
-            console.log("sensorCharBatt: ", newValueReceived, " ", elemUuid, " ", sensorCharBatt);
-        break;
-        case sensorCharInfo:
-            //retrievedValueInfo.innerHTML = newValueReceived;
-            //timestampInfoContainer.innerHTML = getDateTime();
-            console.log("sensorCharInfo: ", newValueReceived, " ", elemUuid, " ", sensorCharInfo);
-        break;
-		*/
+
         default:
             console.log("Unknown Characteristic: ", newValueReceived, " ", elemUuid);
         }
     } 
 
-    /*
-    //Characteristic Change funktion
-    function handleCharacteristicChange(event){
-        const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Characteristic value changed: ", newValueReceived);
-        retrievedValue.innerHTML = newValueReceived;
-        timestampContainer.innerHTML = getDateTime();
-    } 
-
-    //T1 Change function
-    function handleCharT1Change(event){
-        const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Characteristic value changed sensorCharT1: ", newValueReceived);
-        retrievedValueT1.innerHTML = newValueReceived;
-        timestampT1Container.innerHTML = getDateTime();
-    } 
-
-    //T2 Change function
-    function handleCharT2Change(event){
-        const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Characteristic value changed sensorCharT2: ", newValueReceived);
-        retrievedValueT2.innerHTML = newValueReceived;
-        timestampT2Container.innerHTML = getDateTime();
-    } 
-
-    //T3 Change function
-    function handleCharT3Change(event){
-        const newValueReceived = new TextDecoder().decode(event.target.value);
-        console.log("Characteristic value changed sensorCharT3: ", newValueReceived);
-        retrievedValueT3.innerHTML = newValueReceived;
-        timestampT3Container.innerHTML = getDateTime();
-    } 
-*/
-    function writeOnCharacteristic(value){
+    async function writeOnCharacteristic(value){
         if (bleServer && bleServer.connected) {
-            bleServiceFound.getCharacteristic(ledCharacteristic)
-            .then(characteristic => {
-                console.log("Found the LED characteristic: ", characteristic.uuid);
+            try {
+                console.log('bleServiceFound: ', bleServiceFound);
+                const characteristic = await bleServiceFound.getCharacteristic(ledCharacteristic);
                 const data = new Uint8Array([value]);
-                return characteristic.writeValue(data);
-            })
-            .then(() => {
+                await characteristic.writeValue(data);
                 latestValueSent.innerHTML = value;
                 console.log("Value written to LEDcharacteristic:", value);
-            })
-            .catch(error => {
+            }
+            catch(error) {
                 console.error("Error writing to the LED characteristic: ", error);
-            });
+            }
         } else {
             console.error ("Bluetooth is not connected. Cannot write to characteristic.")
             window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
@@ -493,7 +475,6 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 						retrievedValueT2.innerHTML = "---";
 						retrievedValueT3.innerHTML = "---";
 						retrievedValueBatt.innerHTML = "---";
-						//retrievedValueInfo.style.color = "#d13a30";
                     })
                     .catch(error => {
                         console.log("An error occurred:", error);
@@ -504,7 +485,7 @@ GitHub e36drift@web.de Google Chrom Android and Windows
         } else {
             // Throw an error if Bluetooth is not connected
             console.error("Bluetooth is not connected.");
-            window.alert("Bluetooth is not connected.")
+            window.alert("Bluetooth is not connected.");
         }
     }
 
@@ -529,8 +510,34 @@ GitHub e36drift@web.de Google Chrom Android and Windows
 		retrievedValueT2.innerHTML = "---";
 		retrievedValueT3.innerHTML = "---";
 		retrievedValueBatt.innerHTML = "---";
+		console.log("connectGatt ", deviceA);
+		connectGatt(deviceA);
 	}
 
+    //Click on 
+    function otFunction() {
+        if (at.style.display === "none") {
+            at.style.display = "block"; //einblenden
+            kt.style.display = "block";
+            ot.style.display = "block";
+            st.style.display = "block";
+            console.log("t.style.display block ", ot.style.display);
+        } else {
+            at.style.display = "none"; //ausblenden
+            kt.style.display = "none";
+            ot.style.display = "none";
+            st.style.display = "none";
+            console.log("t.style.display none ", ot.style.display); 
+        }
+    }
+    //InputButton1 Daten in Variable speichern und an Bluetooth senden
+    function InputButton1(){
+        // Button geklickt
+        receivedUserInput1 = document.getElementById("userInput1").value;
+        console.log("InputButton1 geklickt", receivedUserInput1);
+        userInput1Container.innerHTML = receivedUserInput1;
+        writeOnCharacteristic(receivedUserInput1);
+    }
 
 </script>
 
