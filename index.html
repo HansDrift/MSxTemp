@@ -246,7 +246,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave Android and Windows s
 
     // Info Button
     InfoButton.addEventListener('click', (event) =>{
-        window.alert("e36drift@web.de Temperaturanzeige für MS41, MS42, MS43 mit gängigen Softwareversionen. Bei Bedarf bitte Softwareupdate durchführen.");
+        window.alert("e36drift@web.de Temperaturanzeige für MS41, MS42, MS43 mit gängigen Softwareversionen. Bei Bedarf bitte Softwareupdate durchführen. Mit folgenden Browsern nutzbar: Chrome, Brave oder Apple Bluefy");
 
     });
 
@@ -258,7 +258,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave Android and Windows s
     function isWebBluetoothEnabled() {
         if (!navigator.bluetooth) {
             console.log('Web Bluetooth API is not available in this browser!');
-            bleStateContainer.innerHTML = "BLE in diesem Browser nicht verfügbar. Bitte Chrome, Brave oder Apple Bluefy nutzen!";
+            bleStateContainer.innerHTML = "No BLE: Chrome, Brave, Apple Bluefy nutzen.";
             window.alert('BLE in diesem Browser nicht verfügbar. Bitte Chrome, Brave oder Apple Bluefy nutzen!');
             return false
         }
