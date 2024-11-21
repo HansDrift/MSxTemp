@@ -1,7 +1,7 @@
 
 <!--
 GitHub e36drift@web.de Testfile
-Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple BlueFy Browser
+MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave Android and Windows sowie Apple Bluefy Browser.
 "https://hansdrift.github.io/MSxTemp/" Hans Drift MSx Bluetooth Anzeige
 -->
 
@@ -158,7 +158,7 @@ Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple
         </div>
     </div>
     <div class="footer">
-        <p>MSx Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple BlueFy Browser </p>    
+        <p>MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave Android and Windows sowie Apple Bluefy Browser.</p>    
         <p><a href="https://hansdrift.github.io/MSxTemp/">Hans Drift MSx Bluetooth Anzeige</a></p>    
 </body>
 <script>
@@ -258,7 +258,8 @@ Bluetooth display -- 04a and S3z04a Google Chrom Android and Windows sowie Apple
     function isWebBluetoothEnabled() {
         if (!navigator.bluetooth) {
             console.log('Web Bluetooth API is not available in this browser!');
-            bleStateContainer.innerHTML = "Web Bluetooth API is not available in this browser/device!";
+            bleStateContainer.innerHTML = "BLE in diesem Browser nicht verfügbar. Bitte Chrome, Brave oder Apple Bluefy nutzen!";
+            window.alert('BLE in diesem Browser nicht verfügbar. Bitte Chrome, Brave oder Apple Bluefy nutzen!');
             return false
         }
         console.log('Web Bluetooth API supported in this browser.');
