@@ -11,7 +11,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     <title>MSx Bluetooth display</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="icon" class="js-site-favicon" type="image/x-icon" href="HDlogo01.ico">
+    <link rel="icon" class="js-site-favicon" type="image/x-icon" href="HDlogo01.ico">
     <style>
     html {
         font-family: Arial, Helvetica, sans-serif;
@@ -144,7 +144,19 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
                 <p class="gray-label">Last reading: <span id="timestampT2"></span></p>
             </div>
 
+            <div class="card" id="OP">
+                <!--
+                Öldruck
+                -->
+                <h2>Öldruck</h2>
+                <p class="reading"><span id="valueOPContainer">-123.OP</span> bar</p>
+                <p class="gray-label">Last reading: <span id="timestampOP"></span></p>
+            </div>
+
             <div class="card" id="OT">
+                <!--
+                Öltemperatur
+                -->
                 <h2>Öltemperatur</h2>
                 <p class="reading"><span id="valueT3Container">-123.T3</span> °C</p>
                 <p class="gray-label">Last reading: <span id="timestampT3"></span></p>
@@ -165,7 +177,6 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
-    const InfoButton = document.getElementById('InfoButton');
     const onButton = document.getElementById('onButton');
     const offButton = document.getElementById('offButton');
     const retrievedValue = document.getElementById('valueContainer');
@@ -173,6 +184,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     const retrievedValueT1 = document.getElementById('valueT1Container');
     const retrievedValueT2 = document.getElementById('valueT2Container');
     const retrievedValueT3 = document.getElementById('valueT3Container');
+    const retrievedValueOP = document.getElementById('valueOPContainer');
     const retrievedValueBatt = document.getElementById('valueBattContainer');
     const retrievedValueInfo = document.getElementById('valueInfoContainer');
 
@@ -183,10 +195,27 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     const timestampT1Container = document.getElementById('timestampT1');
     const timestampT2Container = document.getElementById('timestampT2');
     const timestampT3Container = document.getElementById('timestampT3');
+    const timestampOPContainer = document.getElementById('timestampOP');
     const timestampBattContainer = document.getElementById('timestampBatt');
     const timestampInfoContainer = document.getElementById('timestampInfo');
 
     const userInput1Container = document.getElementById('valueUserInput1');
+    /*
+    31.07.2024 generiert unter:
+    https://www.uuidgenerator.net/
+    
+    aefef71a-088f-4d64-8b0a-b7f850207df6
+    4427bd07-29e9-470c-adab-f43d9c6f69b3
+    754b92b1-9280-424c-a967-ef50cb01f85f
+    c51f6137-e763-4617-9c0d-6227c6003080
+    06e6e849-8e8c-4c5d-820f-fadea7a63e47
+    20ae8631-5bf5-41e2-a4cc-835295bcc942
+    0cf407a6-3a4d-4abf-b1c6-b478d6021234
+    faf4416a-3741-4f09-b319-d817a50219b5
+    
+    a4e398e8-46a2-4bc1-9001-f251a475985e
+    bb1393db-fc8f-4177-b98d-1557b1bbface
+    */
     
     //Define BLE Device Specs
     var deviceName ='MSx';
@@ -200,12 +229,14 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     var sensorCharT1= 'c51f6137-e763-4617-9c0d-6227c6003080';
     var sensorCharT2= '06e6e849-8e8c-4c5d-820f-fadea7a63e47';
     var sensorCharT3= '20ae8631-5bf5-41e2-a4cc-835295bcc942';
+    //Für OP keine ID
     var sensorCharBatt= '0cf407a6-3a4d-4abf-b1c6-b478d6021234';
     var sensorCharInfo= 'faf4416a-3741-4f09-b319-d817a50219b5';
 
 
     //Global Variables to Handle Bluetooth
     var bleServer;
+    //var bleServiceFound;
     var bleServiceFound = 0;
     var sensorCharacteristicFound;
 	var timeoutDME = 10000; //timeout, if Characteristics not updates since 10000msek
@@ -215,6 +246,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     var sensorCharT1Found;
     var sensorCharT2Found;
     var sensorCharT3Found;
+    var sensorCharOPFound;
     var sensorCharBattFound;
     var sensorCharInfoFound;
 
@@ -223,6 +255,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     var receivedValueT1;
     var receivedValueT2;
     var receivedValueT3;
+    var receivedValueOP;
     var receivedValueBatt;
     var receivedValueInfo;
 
@@ -231,6 +264,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     var at = document.getElementById("AT");
     var kt = document.getElementById("KT");
     var ot = document.getElementById("OT");
+    var op = document.getElementById("OP"); //Öldruck
     var st = document.getElementById("ST");
 
     // Connect Button (search for BLE Devices only if BLE is available)
@@ -244,12 +278,6 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
 
-    // Info Button
-    InfoButton.addEventListener('click', (event) =>{
-        window.alert("e36drift@web.de Temperaturanzeige für MS41, MS42, MS43 mit gängigen Softwareversionen. Bei Bedarf bitte Softwareupdate durchführen. Mit folgenden Browsern nutzbar: Chrome, Brave oder Apple Bluefy");
-
-    });
-
     // Write to the ESP32 LED Characteristic
     onButton.addEventListener('click', () => writeOnCharacteristic(1));
     offButton.addEventListener('click', () => writeOnCharacteristic(0));
@@ -258,8 +286,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     function isWebBluetoothEnabled() {
         if (!navigator.bluetooth) {
             console.log('Web Bluetooth API is not available in this browser!');
-            bleStateContainer.innerHTML = "No BLE Use Chrome, Brave, Bluefy";
-            window.alert('BLE in diesem Browser nicht verfügbar. Bitte Chrome, Brave oder Apple Bluefy nutzen!');
+            bleStateContainer.innerHTML = "Web Bluetooth API is not available in this browser/device!";
             return false
         }
         console.log('Web Bluetooth API supported in this browser.');
@@ -269,6 +296,9 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     // Connect to BLE Device and Enable Notifications
     async function connectToDevice(device){
         console.log('Initializing Bluetooth...');
+        //Hier einfach connect() als Testaufruf ohne BLE
+		//connect();
+		//---
 		try {
 			console.log('device = navigator.bluetooth.requestDevice');			
 			device = await navigator.bluetooth.requestDevice({
@@ -286,6 +316,13 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 		}
         catch(error) {
             console.log('Error connectToDevice: ', error);
+			//setTimeout(function() {
+				// Code, der erst nach 2 Sekunden ausgeführt wird
+				//alert('Warten! 3Sek. ');
+				//console.log('Warte 3Sek. ');
+			//}, 3000);
+			//console.log('connectToDevice(): ', deviceA);
+			//connectToDevice(deviceA);
         }
 		
     }
@@ -311,18 +348,46 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
             console.log("value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
+            //Im Zähler Datenmüll vermeiden
+			//retrievedValue.innerHTML = decodedValue;
 		}
         catch(error) {
             console.log('connectGatt(): ', error);
 			setTimeout(function() {
 				// Code, der erst nach 2 Sekunden ausgeführt wird
+				//alert('Warten! 3Sek. ');
 				console.log('Warte 3Sek. ');
 				console.log('connectGatt(): ', deviceA);
 				connectGatt(deviceA);
 			}, 3000);
 			console.log('connectGatt() nach setTimeout: ', deviceA);
+			//connectGatt(deviceA);
         }
-    }	
+    }
+/* //Aktuell nicht genutzt	
+function exponentialBackoff(max, delay, toTry, success, fail) {
+  toTry().then(result => success(result))
+  .catch(_ => {
+    if (max === 0) {
+      return fail();
+    }
+    time('Retrying in ' + delay + 's... (' + max + ' tries left)');
+    setTimeout(function() {
+      exponentialBackoff(--max, delay, toTry, success, fail); //ohne *2 Immer längere Wartezeit
+	  //exponentialBackoff(--max, delay * 2, toTry, success, fail); //*2 Immer längere Wartezeit
+    }, delay * 1000);
+  });
+}
+
+function time(text) {
+  //
+	console.log('[' + new Date().toJSON().substr(11, 8) + '] ' + text);
+	//log('[' + new Date().toJSON().substr(11, 8) + '] ' + text);
+}
+
+*/
+// Reconnect Test Ende --------------------------------
+	
     function onDisconnected(event){
         console.log('----------------------------onDisconnected -- Device Disconnected:', event.target.device.name);
         bleStateContainer.innerHTML = "Verbindung getrennt";
@@ -331,8 +396,13 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 		retrievedValueT1.innerHTML = "---";
 		retrievedValueT2.innerHTML = "---";
 		retrievedValueT3.innerHTML = "---";
+        retrievedValueOP.innerHTML = "---";
 		retrievedValueBatt.innerHTML = "---";
+        //retrievedValueInfo.style.color = "#d13a30";
+        //Ab connect() starten (Kein Auswahlfenster)
+	    //connect();
 	    connectGatt(deviceA);
+		//connectToDevice();
     }
 
     //Characteristic Change funktion mit Abfrage uuid
@@ -344,6 +414,11 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
         switch (elemUuid){
 
         case sensorCharacteristic:
+        //    retrievedValue.innerHTML = newValueReceived;
+        //    timestampContainer.innerHTML = getDateTime();
+        //    console.log("sensorCharacteristic: ", newValueReceived, " ", elemUuid, " ", sensorCharacteristic);
+        //    break;
+        //case sensorCharT1:
             //Test Mehrere Werte teilen
             //var receivedValueT1 = 'T1 110,33 T2 110,25 T3 141,263 Batt 16,70 Info Mxx2 X06 66,66°C X07 77,77V';
             receivedValue = newValueReceived;
@@ -421,7 +496,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 				  alertTimerIdDME = setTimeout ( "setDMEtimeout()", timeoutDME );
 				  console.log("alertTimerIdDME 2 "  + alertTimerIdDME + " Time: " + timeoutDME);
               }          
-              if (chars[10] == 'Value' ){
+              if (chars[10] == 'xxValue' ){
  				  clearTimeout(alertTimerIdDME);
 				  console.log("clearTimeout "  + alertTimerIdDME + " Time: " + timeoutDME);
 				  retrievedValue.innerHTML = chars[11];
@@ -430,7 +505,29 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 				  alertTimerIdDME = setTimeout ( "setDMEtimeout()", timeoutDME );
 				  console.log("alertTimerIdDME 2 "  + alertTimerIdDME + " Time: " + timeoutDME);
               } 
-            timestampT1Container.innerHTML = getDateTime();
+              if (chars[12] == 'OP' ){
+                retrievedValueOP.innerHTML = chars[13];
+				  timestampOPContainer.innerHTML = getDateTime();
+				  if ( parseInt(chars[13]) < 1 ){
+						console.log(" <10 " + chars[13]);
+						retrievedValueOP.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+				  } else if ( parseInt(chars[13]) > 12 ){						
+						console.log(" >20 " + chars[13]);
+						retrievedValueOP.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+				  } else{
+						console.log(" Else " + chars[13]);
+						retrievedValueOP.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+				  }
+				  if ( chars[13] == "---" ){
+                        op.style.display = "none"; //ausblenden
+                        console.log("ot none " + chars[13]);
+				  } else{
+                        op.style.display = "block"; //einblenden
+                        console.log("ot block " + chars[13]);
+				  }                  
+                	console.log(" -- OP " + chars[13]);                	
+              }
+              timestampT1Container.innerHTML = getDateTime();
             console.log("sensorCharT1: ", newValueReceived, " ", elemUuid, " ", sensorCharT1);
         break;
 
@@ -475,7 +572,9 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 						retrievedValueT1.innerHTML = "---";
 						retrievedValueT2.innerHTML = "---";
 						retrievedValueT3.innerHTML = "---";
+                        retrievedValueOP.innerHTML = "---";
 						retrievedValueBatt.innerHTML = "---";
+						//retrievedValueInfo.style.color = "#d13a30";
                     })
                     .catch(error => {
                         console.log("An error occurred:", error);
@@ -486,7 +585,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
         } else {
             // Throw an error if Bluetooth is not connected
             console.error("Bluetooth is not connected.");
-            window.alert("Bluetooth is not connected.");
+            window.alert("Bluetooth is not connected.")
         }
     }
 
@@ -510,9 +609,11 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 		retrievedValueT1.innerHTML = "---";
 		retrievedValueT2.innerHTML = "---";
 		retrievedValueT3.innerHTML = "---";
+        retrievedValueOP.innerHTML = "---";
 		retrievedValueBatt.innerHTML = "---";
 		console.log("connectGatt ", deviceA);
 		connectGatt(deviceA);
+		//connectToDevice();
 	}
 
     //Click on 
@@ -521,12 +622,14 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
             at.style.display = "block"; //einblenden
             kt.style.display = "block";
             ot.style.display = "block";
+            op.style.display = "block";
             st.style.display = "block";
             console.log("t.style.display block ", ot.style.display);
         } else {
             at.style.display = "none"; //ausblenden
             kt.style.display = "none";
             ot.style.display = "none";
+            op.style.display = "none";
             st.style.display = "none";
             console.log("t.style.display none ", ot.style.display); 
         }
@@ -534,6 +637,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     //InputButton1 Daten in Variable speichern und an Bluetooth senden
     function InputButton1(){
         // Button geklickt
+        //window.alert("InputButton1 geklickt");
         receivedUserInput1 = document.getElementById("userInput1").value;
         console.log("InputButton1 geklickt", receivedUserInput1);
         userInput1Container.innerHTML = receivedUserInput1;
