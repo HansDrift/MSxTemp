@@ -118,7 +118,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
                     </tr>
                 </table>
             </h1>
-        </div>
+        </div>  
     </div>
     <div class="content">
         <div class="card-grid">
@@ -167,6 +167,19 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
                 <p class="reading"><span id="valueBattContainer">-000.Batt</span> V</p>
                 <p class="gray-label">Last reading: <span id="timestampBatt"></span></p>
             </div>
+            <!-- ST und valueContainer ausblenden, da nicht benoetigt -->
+            <div class="card" id="ST">
+                <h2>Kontrollschalter test</h2>
+                <button id="onButton" class="onButton">ON</button>
+                <button id="offButton" class="offButton">OFF</button>
+                <p class="gray-label">Last value sent: <span id="valueSent"></span></p>
+            </div>
+
+            <div class="card" id="TS"> //timestamp
+                <h2>Zähler</h2>
+                <p class="reading"><span id="valueContainer">---</span></p>
+                <p class="gray-label">Last reading: <span id="timestamp"></span></p>
+            </div>        
         </div>
     </div>
     <div class="footer">
@@ -261,11 +274,17 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 
     var receivedUserInput1;
 
+    //id fuer Elemente welche ausgeblendet werden koennen
     var at = document.getElementById("AT");
     var kt = document.getElementById("KT");
     var ot = document.getElementById("OT");
     var op = document.getElementById("OP"); //Öldruck
     var st = document.getElementById("ST");
+    var ts = document.getElementById("TS"); //timestamp
+
+    //Elemente die dauerhaft ausgeblendet bleiben (Bei dieser Version nicht benoetigt)
+    st.style.display = "none"; //SchalterTaste On/Off ausblenden
+    ts.style.display = "none"; //timestamp ausblenden
 
     // Connect Button (search for BLE Devices only if BLE is available)
     connectButton.addEventListener('click', (event) => {
@@ -309,9 +328,11 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
 				console.log('Device Selected: ', device.name);
 				bleStateContainer.innerHTML = 'Verbunden mit ' + device.name;
 				bleStateContainer.style.color = "#24af37";
-				device.addEventListener('gattservicedisconnected', onDisconnected);
-				console.log("Nach gattservicedisconnected()");
-				deviceA = device; //Setze deviceA auf verbundenes Bluetooth Gerät
+				//device.addEventListener('gattservicedisconnected', onDisconnected);
+				//console.log("Nach gattservicedisconnected()");
+				device.addEventListener('gattserverdisconnected', onDisconnected);
+				console.log("Nach gattserverdisconnected()");
+                deviceA = device; //Setze deviceA auf verbundenes Bluetooth Gerät
 				connectGatt(device);
 		}
         catch(error) {
@@ -348,6 +369,8 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
             console.log("value: ", value);
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
+            bleStateContainer.innerHTML = 'Verbunden mit ' + deviceA.name;
+            bleStateContainer.style.color = "#24af37";            
             //Im Zähler Datenmüll vermeiden
 			//retrievedValue.innerHTML = decodedValue;
 		}
@@ -389,7 +412,7 @@ function time(text) {
 // Reconnect Test Ende --------------------------------
 	
     function onDisconnected(event){
-        console.log('----------------------------onDisconnected -- Device Disconnected:', event.target.device.name);
+        console.log('----------------------------onDisconnected -- Device Disconnected:');//, event.target.device.name);
         bleStateContainer.innerHTML = "Verbindung getrennt";
         bleStateContainer.style.color = "#d13a30";
         retrievedValueInfo.innerHTML = "---";
@@ -496,7 +519,7 @@ function time(text) {
 				  alertTimerIdDME = setTimeout ( "setDMEtimeout()", timeoutDME );
 				  console.log("alertTimerIdDME 2 "  + alertTimerIdDME + " Time: " + timeoutDME);
               }          
-              if (chars[10] == 'xxValue' ){
+              if (chars[10] == 'Value' ){
  				  clearTimeout(alertTimerIdDME);
 				  console.log("clearTimeout "  + alertTimerIdDME + " Time: " + timeoutDME);
 				  retrievedValue.innerHTML = chars[11];
@@ -509,23 +532,31 @@ function time(text) {
                 retrievedValueOP.innerHTML = chars[13];
 				  timestampOPContainer.innerHTML = getDateTime();
 				  if ( parseInt(chars[13]) < 1 ){
-						console.log(" <10 " + chars[13]);
+						console.log(" OP <1 " + chars[13]);
 						retrievedValueOP.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
 				  } else if ( parseInt(chars[13]) > 12 ){						
-						console.log(" >20 " + chars[13]);
+						console.log(" OP >12 " + chars[13]);
 						retrievedValueOP.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
 				  } else{
-						console.log(" Else " + chars[13]);
+						console.log(" OP Else " + chars[13]);
 						retrievedValueOP.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
 				  }
 				  if ( chars[13] == "---" ){
                         op.style.display = "none"; //ausblenden
-                        console.log("ot none " + chars[13]);
+                        console.log("op none " + chars[13]);
 				  } else{
                         op.style.display = "block"; //einblenden
-                        console.log("ot block " + chars[13]);
+                        console.log("op block " + chars[13]);
 				  }                  
                 	console.log(" -- OP " + chars[13]);                	
+              }
+              //if (chars.length < 13 ){ //12+1
+              if (chars[12] == undefined ){
+                retrievedValueOP.innerHTML = chars[13];
+				timestampOPContainer.innerHTML = getDateTime();
+                op.style.display = "none"; //ausblenden
+                console.log("op leer none " + chars[13]);
+                console.log("chars.length " + chars.length);             	
               }
               timestampT1Container.innerHTML = getDateTime();
             console.log("sensorCharT1: ", newValueReceived, " ", elemUuid, " ", sensorCharT1);
