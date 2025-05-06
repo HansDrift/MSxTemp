@@ -1,7 +1,7 @@
 
 <!--
 GitHub e36drift@web.de Testfile
-MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.
+MSx Bluetooth display: i15 korr 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.
 "https://hansdrift.github.io/MSxTemp/" Hans Drift MSx Bluetooth Anzeige
 -->
 
@@ -183,7 +183,7 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
         </div>
     </div>
     <div class="footer">
-        <p>MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.</p>    
+        <p>MSx Bluetooth display: i15 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.</p>    
         <p><a href="https://hansdrift.github.io/MSxTemp/">Hans Drift MSx Bluetooth Anzeige</a></p>    
 </body>
 <script>
@@ -231,12 +231,12 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     */
     
     //Define BLE Device Specs
-    var deviceName ='MSx';
-	var deviceA;
-    var bleService = 'aefef71a-088f-4d64-8b0a-b7f850207df6';
-    var sensorCharacteristic= '4427bd07-29e9-470c-adab-f43d9c6f69b3';
-    var ledCharacteristic = '754b92b1-9280-424c-a967-ef50cb01f85f';
-    
+	//i15
+	const deviceName = 'MSx';
+	let deviceA;
+	const bleService = 'aefef71a-088f-4d64-8b0a-b7f850207df6';
+	const sensorCharacteristic = '4427bd07-29e9-470c-adab-f43d9c6f69b3';
+	const ledCharacteristic = '754b92b1-9280-424c-a967-ef50cb01f85f';
     
     //Neu
     var sensorCharT1= 'c51f6137-e763-4617-9c0d-6227c6003080';
@@ -245,13 +245,12 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     //Für OP keine ID
     var sensorCharBatt= '0cf407a6-3a4d-4abf-b1c6-b478d6021234';
     var sensorCharInfo= 'faf4416a-3741-4f09-b319-d817a50219b5';
+	
+	//i15
+	let bleServer;
+	let bleServiceFound;
+	let sensorCharacteristicFound;
 
-
-    //Global Variables to Handle Bluetooth
-    var bleServer;
-    //var bleServiceFound;
-    var bleServiceFound = 0;
-    var sensorCharacteristicFound;
 	var timeoutDME = 10000; //timeout, if Characteristics not updates since 10000msek
     var alertTimerIdDME = 0; //timeout id
 	
@@ -287,12 +286,8 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     ts.style.display = "none"; //timestamp ausblenden
 
     // Connect Button (search for BLE Devices only if BLE is available)
-    connectButton.addEventListener('click', (event) => {
-        //Prüfung zum Test deaktiviert
-	if (isWebBluetoothEnabled()){
-            connectToDevice(deviceA);
-        }
-    });
+	//i15
+	connectButton.addEventListener('click', connectToDevice);
 
     // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
@@ -315,36 +310,24 @@ MSx Bluetooth display: 04a and S3z04a Google Chrome, Brave in Android und Window
     // Connect to BLE Device and Enable Notifications
     async function connectToDevice(device){
         console.log('Initializing Bluetooth...');
-        //Hier einfach connect() als Testaufruf ohne BLE
-		//connect();
-		//---
+		//i15
 		try {
-			console.log('device = navigator.bluetooth.requestDevice');			
-			device = await navigator.bluetooth.requestDevice({
-			//const device = await navigator.bluetooth.requestDevice({
-				filters: [{name: deviceName}],
+			const device = await navigator.bluetooth.requestDevice({
+				filters: [{ name: deviceName }],
 				optionalServices: [bleService]
-			})
-				console.log('Device Selected: ', device.name);
-				bleStateContainer.innerHTML = 'Verbunden mit ' + device.name;
-				bleStateContainer.style.color = "#24af37";
-				//device.addEventListener('gattservicedisconnected', onDisconnected);
-				//console.log("Nach gattservicedisconnected()");
-				device.addEventListener('gattserverdisconnected', onDisconnected);
-				console.log("Nach gattserverdisconnected()");
-                deviceA = device; //Setze deviceA auf verbundenes Bluetooth Gerät
-				connectGatt(device);
+			});
+			console.log('Device Selected: ', device.name);
+			bleStateContainer.innerHTML = 'Verbunden mit ' + device.name;
+			bleStateContainer.style.color = "#24af37";
+			device.addEventListener('gattserverdisconnected', onDisconnected);
+			deviceA = device;
+			await connectGatt(device);
+		} catch (error) {
+			console.log('Error connectToDevice: ', error);
+			bleStateContainer.innerHTML = "Verbindung fehlgeschlagen: " + error.message;
+			bleStateContainer.style.color = "#d13a30";
 		}
-        catch(error) {
-            console.log('Error connectToDevice: ', error);
-			//setTimeout(function() {
-				// Code, der erst nach 2 Sekunden ausgeführt wird
-				//alert('Warten! 3Sek. ');
-				//console.log('Warte 3Sek. ');
-			//}, 3000);
-			//console.log('connectToDevice(): ', deviceA);
-			//connectToDevice(deviceA);
-        }
+
 		
     }
 	async function connectGatt(device){
