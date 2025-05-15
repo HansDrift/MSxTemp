@@ -5,6 +5,7 @@ Readme
 e36drift@web.de Page: MSx Bluetooth Anzeige/switch https://hansdrift.github.io/MSxTemp/
 
 Use Chrome or Brave on Android and Windows
+
 Use BLE Link Browser on Apple
 
 MSx on Instagram https://www.instagram.com/p/DCobeYuAszT/?utm_source=ig_web_button_share_sheet
