@@ -1,7 +1,7 @@
 
 <!--
 GitHub e36drift@web.de Testfile
-MSx Bluetooth display: i16 korr 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple BLE Link Browser nutzbar.
+MSx Bluetooth display: i20 blink implementation 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.
 "https://hansdrift.github.io/MSxTemp/" Hans Drift MSx Bluetooth Anzeige
 -->
 
@@ -104,6 +104,10 @@ MSx Bluetooth display: i16 korr 04a and S3z04a Google Chrome, Brave in Android u
         line-height: 0.0;
         font-size: 3.5rem;
     }
+	.blink {
+		animation: blink 0.6s steps(1) infinite; }
+	@keyframes blink
+	{ 50% { color: #d13a30; } }
     </style>
     <meta charset="UTF-8">
 </head>
@@ -183,7 +187,7 @@ MSx Bluetooth display: i16 korr 04a and S3z04a Google Chrome, Brave in Android u
         </div>
     </div>
     <div class="footer">
-        <p>MSx Bluetooth display: i16 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple BLE Link Browser nutzbar.</p>    
+        <p>MSx Bluetooth display: i20 blink 04a and S3z04a Google Chrome, Brave in Android und Windows, sowie Apple Bluefy Browser nutzbar.</p>    
         <p><a href="https://hansdrift.github.io/MSxTemp/">Hans Drift MSx Bluetooth Anzeige</a></p>    
 </body>
 <script>
@@ -295,6 +299,10 @@ MSx Bluetooth display: i16 korr 04a and S3z04a Google Chrome, Brave in Android u
     // Write to the ESP32 LED Characteristic
     onButton.addEventListener('click', () => writeOnCharacteristic(1));
     offButton.addEventListener('click', () => writeOnCharacteristic(0));
+
+	//Test Blink//
+	//retrievedValueT2.classList.add('blink');
+	//Test Blink//
 
     // Check if BLE is available in your Browser
     function isWebBluetoothEnabled() {
@@ -442,17 +450,27 @@ function time(text) {
                 	console.log(" -- T1 " + chars[1]);                	
               }    
               if (chars[2] == 'T2' ){
-                  retrievedValueT2.innerHTML = chars[3];
+                  //retrievedValueT2.innerHTML = chars[3];
+				  retrievedValueT2.innerHTML = chars[3];
+				  // Blinken, wenn Wert > 106
+				  //if (parseInt(chars[3]) > 106) { retrievedValueT2.classList.add('blink'); }
+				  //else { retrievedValueT2.classList.remove('blink'); }
+				  
 				  timestampT2Container.innerHTML = getDateTime();
 				  if ( parseInt(chars[3]) < 70 ){
 						console.log(" <10 " + chars[3]);
 						retrievedValueT2.style.color = "#2c40b3";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
-				  } else if ( parseInt(chars[3]) > 107 ){						
+						//retrievedValueT2.classList.add('blink'); //Blinken
+					    retrievedValueT2.classList.remove('blink'); //nicht Blinken
+				  } else if ( parseInt(chars[3]) > 107 ){	// > 107 ){						
 						console.log(" >20 " + chars[3]);
-						retrievedValueT2.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						//retrievedValueT2.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT2.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT2.classList.add('blink'); //Blinken
 				  } else{
 						console.log(" Else " + chars[3]);
 						retrievedValueT2.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT2.classList.remove('blink'); //nicht Blinken
 				  }
                 	console.log(" -- T2 " + chars[3]);                	
               }
@@ -462,12 +480,16 @@ function time(text) {
 				  if ( parseInt(chars[5]) < 70 ){
 						console.log(" <10 " + chars[5]);
 						retrievedValueT3.style.color = "#2c40b3";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT3.classList.remove('blink'); //nicht Blinken
 				  } else if ( parseInt(chars[5]) > 140 ){						
 						console.log(" >20 " + chars[5]);
-						retrievedValueT3.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						//retrievedValueT3.style.color = "#d13a30";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT3.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT3.classList.add('blink'); //Blinken
 				  } else{
 						console.log(" Else " + chars[5]);
 						retrievedValueT3.style.color = "#000000";    // "#d13a30"; rot  "#2c40b3"; blau "#000000"; schwarz
+						retrievedValueT3.classList.remove('blink'); //nicht Blinken
 				  }
 				  if ( chars[5] == "---" ){
                         ot.style.display = "none"; //ausblenden
@@ -661,3 +683,5 @@ function time(text) {
 </script>
 
 </html>
+
+
